@@ -29,11 +29,44 @@
     </application>
 
     <queries>
+        <!-- Wallets -->
         <package android:name="com.f1soft.esewa" />
         <package android:name="com.khalti" />
+        <package android:name="com.swifttechnology.imepay" />
+        <package android:name="com.swifttechnology.imepaymerchant" />
+        <package android:name="com.prabhu.prabhupay" />
         <package android:name="com.f1soft.fonepay.merchant" />
         <package android:name="com.f1soft.fonepay.user" />
-        <package android:name="com.imepay.customer" />
+
+        <!-- Class A Banks -->
+        <package android:name="com.f1soft.rastriyabanijyamobilebanking" />
+        <package android:name="com.f1soft.nepalmobilebanking" />
+        <package android:name="com.f1soft.adblmobilebanking" />
+        <package android:name="com.f1soft.nicasiamobilebanking" /> 
+        <package android:name="com.f1soft.nabilbank" />   
+        <package android:name="com.f1soft.globalime" />   
+        <package android:name="com.f1soft.nimb" />        
+        <package android:name="com.f1soft.prabhubank" />  
+        <package android:name="com.f1soft.siddharthamb" /> 
+        <package android:name="com.f1soft.sanima" />      
+        <package android:name="com.f1soft.citizencol" />  
+        <package android:name="com.f1soft.kumari" />
+        <package android:name="com.f1soft.primebank" />
+        <package android:name="com.f1soft.nepalsbibank" />
+        <package android:name="com.f1soft.standardchartered" />
+        <package android:name="com.f1soft.himalayan" />   
+        <package android:name="com.f1soft.machhapuchhre" />
+        <package android:name="com.f1soft.sunrise" />     
+        <package android:name="com.f1soft.everest" />     
+
+        <!-- Class B Banks -->
+        <package android:name="com.f1soft.garimabank" />
+        <package android:name="com.f1soft.muktinathmobilebanking" />
+        <package android:name="com.f1soft.jyotibank" />       
+        <package android:name="com.f1soft.hbmobilebanking" />       
+        <package android:name="com.f1soft.shangrilabank" />      
+        <package android:name="com.f1soft.kamana" />
+
     </queries>
 
 </manifest>

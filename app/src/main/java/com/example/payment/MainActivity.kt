@@ -34,11 +34,41 @@ class MainActivity : AppCompatActivity() {
 
     // 1. Define the package names for Nepalese Payment Apps
     private val paymentApps = mapOf(
-        "eSewa" to "com.f1soft.esewa",
-        "Khalti" to "com.khalti",
+        "eSewa" to "com.f1soft.esewa", // verified
+        "Khalti" to "com.khalti", // verified
+        "IME Pay" to "com.swifttechnology.imepay", // verified
+        "IME Pay Merchant" to "com.swifttechnology.imepaymerchant",
         "Fonepay" to "com.f1soft.fonepay.user",
         "Fonepay Merchant" to "com.f1soft.fonepay.merchant",
-        "IME Pay" to "com.imepay.customer"
+        "Prabhu Pay" to "com.prabhu.prabhupay",
+
+        "NIC Asia MoBank" to "com.f1soft.nicasiamobilebanking", // verified
+        "Nabil SmartBank" to "com.f1soft.nabilbank",
+        "Global Smart Plus" to "com.f1soft.globalime",
+        "NIMB Smart" to "com.f1soft.nimb",
+        "RBB Digital Sansar" to "com.f1soft.rastriyabanijyamobilebanking",
+        "NBL BankSmart" to "com.f1soft.nepalmobilebanking",
+        "ADBL Smart" to "com.f1soft.adblmobilebanking",
+        "Prabhu Smart" to "com.f1soft.prabhubank",
+        "Siddhartha BankSmart" to "com.f1soft.siddharthamb",
+        "Sanima Sajilo" to "com.f1soft.sanima",
+        "Citizens Smart" to "com.f1soft.citizencol",
+        "Kumari Smart" to "com.f1soft.kumari",
+        "HI-MB (Himalayan)" to "com.f1soft.himalayan",
+        "EBL Touch (Everest)" to "com.f1soft.everest",
+        "Laxmi Sunrise Smart" to "com.f1soft.sunrise",
+        "MBL M-Smart" to "com.f1soft.machhapuchhre",
+        "NMB e-banking" to "com.f1soft.nmbbank",
+        "Prime Smart" to "com.f1soft.primebank",
+        "SBI Nepal Smart" to "com.f1soft.nepalsbibank",
+        "SCB Nepal" to "com.f1soft.standardchartered",
+
+        "Garima Digi Batuwa" to "com.f1soft.garimabank",
+        "Muktinath Smart" to "com.f1soft.muktinathmobilebanking",
+        "Jyoti Smart" to "com.f1soft.jyotibank",
+        "Lumbini Smart" to "com.f1soft.hbmobilebanking",
+        "Shangri-la Smart" to "com.f1soft.shangrilabank",
+        "Kamana Sewa Smart" to "com.f1soft.kamana"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
