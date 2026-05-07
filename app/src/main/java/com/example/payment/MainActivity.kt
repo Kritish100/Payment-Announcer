@@ -16,6 +16,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.ImageView
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -133,26 +136,50 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAppSelectionDialog() {
         val installedApps = paymentApps.filter { isPackageInstalled(it.value) }
-
+    
         if (installedApps.isEmpty()) {
             Toast.makeText(this, "No payment apps detected.", Toast.LENGTH_SHORT).show()
             return
         }
-
-        val appNames = installedApps.keys.toTypedArray()
-        AlertDialog.Builder(this)
-            .setTitle("Select App to Configure")
-            .setItems(appNames) { _, which ->
-                val selectedAppName = appNames[which]
-                val packageName = installedApps[selectedAppName]!!
-                navigateToNotificationSettings(selectedAppName, packageName)
+    
+        // 1. Inflate the custom dialog container
+        val inflater = LayoutInflater.from(this)
+        val dialogView = inflater.inflate(R.layout.dialog_select_app, null)
+        val container = dialogView.findViewById<LinearLayout>(R.id.appContainer)
+    
+        // 2. Create the dialog
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+    
+        // 3. Dynamically add a row for each installed app
+        for (app in installedApps) {
+            val rowView = inflater.inflate(R.layout.item_payment_app, container, false)
+            
+            val nameText = rowView.findViewById<TextView>(R.id.appName)
+            nameText.text = app.key
+    
+            // When a row is tapped:
+            rowView.setOnClickListener {
+                dialog.dismiss()
+                navigateToNotificationSettings(app.key, app.value)
             }
-            .setNegativeButton("CANCEL", null)
-            .show()
+    
+            container.addView(rowView)
+        }
+    
+        dialog.show()
+    
+        // 4. Optional: Force the dialog to be wide enough on small screens
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(), 
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
     }
 
+
     private fun navigateToNotificationSettings(appName: String, packageName: String) {
-        Toast.makeText(this, "Opening $appName settings...\nPlease ensure Notifications are ENABLED", Toast.LENGTH_LONG).show()
+        Toast.makeText(this, "Opening $appName settings ...", Toast.LENGTH_LONG).show()
 
         val intent = Intent().apply {
             try {
@@ -176,7 +203,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 startActivity(Intent(Settings.ACTION_SETTINGS))
             }
-        }, 1000)
+        }, 700)
     }
 
     // --- UI Updates & Animations ---
