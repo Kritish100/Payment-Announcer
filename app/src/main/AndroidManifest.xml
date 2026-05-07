@@ -3,8 +3,8 @@
 
     <application
         android:allowBackup="true"
-        android:label="PayGuard"
-        android:theme="@style/Theme.AppCompat">
+        android:label="PaySay"
+        android:theme="@style/Theme.Payment">
 
         <!-- THE ACTIVITY MUST BE INSIDE HERE -->
         <activity
@@ -18,7 +18,7 @@
 
         <service 
             android:name=".NotificationService"
-            android:label="PayGuard Listener"
+            android:label="PaySay Listener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="true">
             <intent-filter>

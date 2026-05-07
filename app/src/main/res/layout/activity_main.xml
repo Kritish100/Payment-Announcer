@@ -1,0 +1,189 @@
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PaySay"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#1976D2"
+            android:layout_marginTop="16dp"/>
+
+        <View
+            android:id="@+id/statusIndicator"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/button_circle"
+            android:backgroundTint="#9E9E9E" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STANDBY"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="#9E9E9E"
+            android:letterSpacing="0.05"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStartService"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="START"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:backgroundTint="#2E7D32"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnStopService"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="STOP"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:backgroundTint="#9E9E9E"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SYSTEM CHECKLIST"
+            android:layout_marginTop="44dp"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#757575"
+            android:letterSpacing="0.1"/>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginTop="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="!"
+                android:textColor="#D32F2F"
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Notification Access"
+                android:textColor="#212121"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/btnFixNotification"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FIX"
+                android:textColor="#1976D2"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✓"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Merchant App Alerts"
+                android:textColor="#212121"
+                android:textStyle="bold"/>
+            <Button
+                android:id="@+id/btnVerifyApps"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VERIFY"
+                android:textColor="#1976D2"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginBottom="44dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnWhatsApp"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="WhatsApp"
+                android:textSize="12sp"
+                app:backgroundTint="#25D366"
+                app:cornerRadius="8dp"
+                app:icon="@android:drawable/stat_notify_chat"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMail"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Email"
+                android:textSize="12sp"
+                app:backgroundTint="#1976D2"
+                app:cornerRadius="8dp"
+                app:icon="@android:drawable/ic_dialog_email"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Data Transparency &amp; Privacy"
+            android:layout_marginTop="32dp"
+            android:padding="12dp"
+            android:textSize="12sp"
+            android:textColor="#1976D2"
+            android:background="?attr/selectableItemBackground"/>
+
+    </LinearLayout>
+</ScrollView>
