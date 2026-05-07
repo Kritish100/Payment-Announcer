@@ -28,4 +28,12 @@
 
     </application>
 
+    <queries>
+        <package android:name="com.f1soft.esewa" />
+        <package android:name="com.khalti" />
+        <package android:name="com.f1soft.fonepay.merchant" />
+        <package android:name="com.f1soft.fonepay.user" />
+        <package android:name="com.imepay.customer" />
+    </queries>
+
 </manifest>

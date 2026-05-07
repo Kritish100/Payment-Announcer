@@ -4,17 +4,22 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
@@ -24,50 +29,62 @@ class MainActivity : AppCompatActivity() {
     private var isServiceRunning = false
     private var glowAnimator: ObjectAnimator? = null
 
+    // 1. Define the package names for Nepalese Payment Apps
+    private val paymentApps = mapOf(
+        "eSewa" to "com.f1soft.esewa",
+        "Khalti" to "com.khalti",
+        "Fonepay" to "com.f1soft.fonepay.user",
+        "Fonepay Merchant" to "com.f1soft.fonepay.merchant",
+        "IME Pay" to "com.imepay.customer"
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // UI Initialization
+        // --- UI Initialization ---
         val pulseGlow = findViewById<View>(R.id.pulseGlow)
         val pulseContainer = findViewById<FrameLayout>(R.id.pulseContainer)
         val innerStatusText = findViewById<TextView>(R.id.innerStatusText)
         val btnToggle = findViewById<MaterialButton>(R.id.btnToggleService)
+        val btnConfigureApps = findViewById<Button>(R.id.btnVerifyApps) 
+        val btnFixNotif = findViewById<Button>(R.id.btnFixNotification)
 
         // Set Default State (Standby)
         updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
 
+        // --- Logic: Start/Stop Service ---
         btnToggle.setOnClickListener {
             if (!isServiceRunning) {
-                // User wants to START: Check permission first
                 if (isNotificationServiceEnabled()) {
                     isServiceRunning = true
                     updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
                 } else {
-                    // Permission missing: Show the ACTIONABLE POPUP
                     showPermissionDialog()
                 }
             } else {
-                // User wants to STOP: Always allow stopping
                 isServiceRunning = false
                 updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
             }
         }
 
-        // Checklist Item 1: Notification Access
-        findViewById<Button>(R.id.btnFixNotification).setOnClickListener {
+        // --- Logic: Checklist Actions ---
+        btnFixNotif.setOnClickListener {
             startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
         }
 
-        // Checklist Item 2: Payment App Verification
-        findViewById<Button>(R.id.btnVerifyApps).setOnClickListener {
-            showPaymentAppDialog()
+        btnConfigureApps.setOnClickListener {
+            showAppSelectionDialog()
         }
 
-        // Support Buttons
+        // --- Support & Branding ---
         findViewById<MaterialButton>(R.id.btnWhatsApp).setOnClickListener {
             val url = "https://api.whatsapp.com/send?phone=97798XXXXXXXX"
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            } catch (e: Exception) {
+                Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show()
+            }
         }
 
         findViewById<MaterialButton>(R.id.btnMail).setOnClickListener {
@@ -77,7 +94,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Privacy Dialog
         findViewById<TextView>(R.id.btnTerms).setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Data Transparency & Privacy")
@@ -85,6 +101,14 @@ class MainActivity : AppCompatActivity() {
                 .setPositiveButton("I Understand", null)
                 .show()
         }
+    }
+
+    // --- Permission & System Logic ---
+
+    private fun isNotificationServiceEnabled(): Boolean {
+        val pkgName = packageName
+        val flat = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
+        return flat != null && flat.contains(pkgName)
     }
 
     private fun showPermissionDialog() {
@@ -98,22 +122,77 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun isPackageInstalled(packageName: String): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun showAppSelectionDialog() {
+        val installedApps = paymentApps.filter { isPackageInstalled(it.value) }
+
+        if (installedApps.isEmpty()) {
+            Toast.makeText(this, "No payment apps detected.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val appNames = installedApps.keys.toTypedArray()
+        AlertDialog.Builder(this)
+            .setTitle("Select App to Configure")
+            .setItems(appNames) { _, which ->
+                val selectedAppName = appNames[which]
+                val packageName = installedApps[selectedAppName]!!
+                navigateToNotificationSettings(selectedAppName, packageName)
+            }
+            .setNegativeButton("CANCEL", null)
+            .show()
+    }
+
+    private fun navigateToNotificationSettings(appName: String, packageName: String) {
+        Toast.makeText(this, "Opening $appName settings...\nPlease ensure Notifications are ENABLED", Toast.LENGTH_LONG).show()
+
+        val intent = Intent().apply {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                    putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                } else {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.parse("package:$packageName")
+                }
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            } catch (e: Exception) {
+                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                data = Uri.parse("package:$packageName")
+            }
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            try {
+                startActivity(intent)
+            } catch (e: Exception) {
+                startActivity(Intent(Settings.ACTION_SETTINGS))
+            }
+        }, 1000)
+    }
+
+    // --- UI Updates & Animations ---
+
     private fun updateChecklistStatus() {
         val hasAccess = isNotificationServiceEnabled()
-        
-        // Notification Access UI Elements
-        val notifIconBadge = findViewById<FrameLayout>(R.id.notifIconBadge) // You'll need to add this ID to your XML FrameLayout
-        val notifIconText = findViewById<TextView>(R.id.notifIconText) // The "!" or "✓" text
+        val notifIconBadge = findViewById<FrameLayout>(R.id.notifIconBadge)
+        val notifIconText = findViewById<TextView>(R.id.notifIconText)
         val btnEnable = findViewById<Button>(R.id.btnFixNotification)
-    
+
         if (hasAccess) {
-            // Success State (Green)
             notifIconBadge.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#E8F5E9"))
             notifIconText.text = "✓"
             notifIconText.setTextColor(Color.parseColor("#4CAF50"))
-            btnEnable.visibility = View.GONE // Hide button if already enabled
+            btnEnable.visibility = View.GONE
         } else {
-            // Warning State (Soft Red/Orange)
             notifIconBadge.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFEBEE"))
             notifIconText.text = "!"
             notifIconText.setTextColor(Color.parseColor("#E57373"))
@@ -121,44 +200,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateChecklistStatus()
-    }
-
     private fun updateUI(running: Boolean, glow: View, container: View, text: TextView, btn: MaterialButton) {
         val activeColor = Color.parseColor("#4CAF50")
         val standbyColor = Color.parseColor("#E57373")
         val activeBg = Color.parseColor("#E8F5E9")
         val standbyBg = Color.parseColor("#FFEBEE")
-
+        
         val strokeColor = if (running) activeColor else standbyColor
         val fillColor = if (running) activeBg else standbyBg
 
-        // 1. Update Circle Appearance
         val background = container.background as GradientDrawable
         background.setColor(fillColor)
         background.setStroke(6, strokeColor)
 
-        // 2. Update Glow Base Color
         glow.backgroundTintList = ColorStateList.valueOf(fillColor)
-
-        // 3. Update Text Content
         text.text = if (running) "ACTIVE" else "STANDBY"
         text.setTextColor(strokeColor)
 
-        // 4. Update Button State
         if (running) {
             btn.text = "STOP SERVICE"
             btn.setBackgroundColor(standbyColor)
-            btn.setTextColor(Color.WHITE)
-            btn.strokeWidth = 0
             startGlowPulse(glow)
         } else {
             btn.text = "START SERVICE"
-            btn.setBackgroundColor(activeColor) // Always Green for START
-            btn.strokeWidth = 0
-            btn.setTextColor(Color.WHITE)
+            btn.setBackgroundColor(activeColor)
             stopGlowPulse(glow)
         }
     }
@@ -168,7 +233,7 @@ class MainActivity : AppCompatActivity() {
         val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 1.5f)
         val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 1.5f)
         val alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0.7f, 0.0f)
-
+        
         glowAnimator = ObjectAnimator.ofPropertyValuesHolder(view, scaleX, scaleY, alpha).apply {
             duration = 1800
             repeatCount = ValueAnimator.INFINITE
@@ -183,20 +248,8 @@ class MainActivity : AppCompatActivity() {
         view.alpha = 0f
     }
 
-    private fun showPaymentAppDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Payment App Readiness")
-            .setMessage("For PaySay to announce payments, please ensure notifications are enabled inside your eSewa, Fonepay, or Khalti app settings.\n\nWithout these notifications, the system cannot detect incoming payments.")
-            .setPositiveButton("Check App Settings") { _, _ ->
-                startActivity(Intent(Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS))
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
-    private fun isNotificationServiceEnabled(): Boolean {
-        val pkgName = packageName
-        val flat = Settings.Secure.getString(contentResolver, "enabled_notification_listeners")
-        return flat != null && flat.contains(pkgName)
+    override fun onResume() {
+        super.onResume()
+        updateChecklistStatus()
     }
 }

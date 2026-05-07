@@ -126,12 +126,15 @@
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:gravity="center_vertical" android:paddingVertical="12dp">
             
-            <FrameLayout android:layout_width="32dp" android:layout_height="32dp" 
-                android:background="@drawable/button_circle" android:backgroundTint="#F5F5F5" 
+            <FrameLayout 
+                android:layout_width="32dp" android:layout_height="32dp" 
+                android:background="@drawable/button_circle" 
+                android:backgroundTint="#E3F2FD" 
                 android:layout_marginEnd="16dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
-                    android:layout_gravity="center" android:text="✓" android:textColor="#9E9E9E" 
-                    android:textStyle="bold"/>
+                <ImageView 
+                    android:layout_width="18dp" android:layout_height="18dp" 
+                    android:layout_gravity="center" 
+                    android:src="@drawable/ic_signal_monitoring" />
             </FrameLayout>
 
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" 
@@ -146,7 +149,7 @@
             <Button android:id="@+id/btnVerifyApps" 
                 style="@style/Widget.MaterialComponents.Button.TextButton" 
                 android:layout_width="wrap_content" android:layout_height="wrap_content" 
-                android:text="VERIFY" android:textColor="#1976D2"/>
+                android:text="Enable" android:textColor="#1976D2"/>
         </LinearLayout>
 
         <TextView
