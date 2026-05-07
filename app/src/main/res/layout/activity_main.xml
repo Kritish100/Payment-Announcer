@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="#FBFBFB">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,173 +17,159 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PaySay"
-            android:textSize="28sp"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#1976D2"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="8dp"/>
 
-        <View
-            android:id="@+id/statusIndicator"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/button_circle"
-            android:backgroundTint="#9E9E9E" />
-
-        <TextView
-            android:id="@+id/statusText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="STANDBY"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:textColor="#9E9E9E"
-            android:letterSpacing="0.05"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginTop="24dp">
+            
+            <View
+                android:id="@+id/pulseGlow"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_circle"
+                android:backgroundTint="#FFEBEE"
+                android:alpha="0"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnStartService"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="START"
-                android:textStyle="bold"
-                app:cornerRadius="12dp"
-                app:backgroundTint="#2E7D32"/>
+            <FrameLayout
+                android:id="@+id/pulseContainer"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/status_circle_filled">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnStopService"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="STOP"
-                android:textStyle="bold"
-                app:cornerRadius="12dp"
-                app:backgroundTint="#9E9E9E"/>
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/innerStatusText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="STANDBY"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#E57373"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Status"
+                        android:textSize="11sp"
+                        android:textColor="#757575"/>
+                </LinearLayout>
+            </FrameLayout>
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnToggleService"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
+            android:text="START SERVICE"
+            android:textStyle="bold"
+            app:cornerRadius="16dp"
+            app:backgroundTint="#4CAF50"
+            app:elevation="2dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SYSTEM CHECKLIST"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="40dp"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:textColor="#757575"
+            android:textColor="#546E7A"
             android:letterSpacing="0.1"/>
 
         <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginTop="8dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingVertical="12dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="!"
-                android:textColor="#D32F2F"
-                android:textStyle="bold"
-                android:layout_marginEnd="12dp"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Notification Access"
-                android:textColor="#212121"
-                android:textStyle="bold"/>
-            <Button
-                android:id="@+id/btnFixNotification"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="FIX"
-                android:textColor="#1976D2"/>
+        <LinearLayout 
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:paddingVertical="12dp">
+            
+            <FrameLayout 
+                android:id="@+id/notifIconBadge"
+                android:layout_width="32dp" android:layout_height="32dp" 
+                android:background="@drawable/button_circle" 
+                android:layout_marginEnd="16dp">
+                
+                <TextView 
+                    android:id="@+id/notifIconText"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:layout_gravity="center" android:text="!" 
+                    android:textStyle="bold"/>
+            </FrameLayout>
+
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" 
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:text="Notification Access" android:textStyle="bold" android:textColor="#263238"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:text="Required to detect payment alerts" android:textSize="11sp" 
+                    android:textColor="#757575"/>
+            </LinearLayout>
+            
+            <Button android:id="@+id/btnFixNotification" 
+                style="@style/Widget.MaterialComponents.Button.TextButton" 
+                android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                android:text="ENABLE" android:textColor="#1976D2"/>
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+        <LinearLayout 
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:gravity="center_vertical" android:paddingVertical="12dp">
+            
+            <FrameLayout android:layout_width="32dp" android:layout_height="32dp" 
+                android:background="@drawable/button_circle" android:backgroundTint="#F5F5F5" 
+                android:layout_marginEnd="16dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:layout_gravity="center" android:text="✓" android:textColor="#9E9E9E" 
+                    android:textStyle="bold"/>
+            </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingVertical="12dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="✓"
-                android:textColor="#2E7D32"
-                android:textStyle="bold"
-                android:layout_marginEnd="12dp"/>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Merchant App Alerts"
-                android:textColor="#212121"
-                android:textStyle="bold"/>
-            <Button
-                android:id="@+id/btnVerifyApps"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="VERIFY"
-                android:textColor="#1976D2"/>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" 
+                android:layout_weight="1" android:orientation="vertical">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:text="Payment App Monitoring" android:textStyle="bold" android:textColor="#263238"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                    android:text="Enable notifications inside your payment apps" android:textSize="11sp" 
+                    android:textColor="#757575"/>
+            </LinearLayout>
+            
+            <Button android:id="@+id/btnVerifyApps" 
+                style="@style/Widget.MaterialComponents.Button.TextButton" 
+                android:layout_width="wrap_content" android:layout_height="wrap_content" 
+                android:text="VERIFY" android:textColor="#1976D2"/>
         </LinearLayout>
 
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginBottom="44dp"/>
+        <TextView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="DIRECT SUPPORT" android:layout_marginTop="32dp"
+            android:textSize="11sp" android:textStyle="bold" android:textColor="#546E7A" android:letterSpacing="0.1"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginTop="8dp"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnWhatsApp"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="WhatsApp"
-                android:textSize="12sp"
-                app:backgroundTint="#25D366"
-                app:cornerRadius="8dp"
-                app:icon="@android:drawable/stat_notify_chat"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnMail"
-                android:layout_width="0dp"
-                android:layout_height="52dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="Email"
-                android:textSize="12sp"
-                app:backgroundTint="#1976D2"
-                app:cornerRadius="8dp"
-                app:icon="@android:drawable/ic_dialog_email"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="16dp">
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnWhatsApp" android:layout_width="0dp" android:layout_height="54dp" android:layout_weight="1" android:layout_marginEnd="8dp" android:text="WhatsApp" app:backgroundTint="#25D366" app:cornerRadius="12dp" app:icon="@android:drawable/stat_notify_chat"/>
+            <com.google.android.material.button.MaterialButton android:id="@+id/btnMail" android:layout_width="0dp" android:layout_height="54dp" android:layout_weight="1" android:layout_marginStart="8dp" android:text="Email" app:backgroundTint="#1976D2" app:cornerRadius="12dp" app:icon="@android:drawable/ic_dialog_email"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/btnTerms"
-            android:layout_width="wrap_content"
+            android:layout_width="wrap_content" 
             android:layout_height="wrap_content"
             android:text="Data Transparency &amp; Privacy"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="40dp"
             android:padding="12dp"
             android:textSize="12sp"
-            android:textColor="#1976D2"
-            android:background="?attr/selectableItemBackground"/>
+            android:textColor="#1976D2"/>
 
     </LinearLayout>
 </ScrollView>
