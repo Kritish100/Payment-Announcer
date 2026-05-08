@@ -43,32 +43,9 @@ class MainActivity : AppCompatActivity() {
         "Prabhu Pay" to "com.prabhu.prabhupay",
 
         "NIC Asia MoBank" to "com.f1soft.nicasiamobilebanking", // verified
-        "Nabil SmartBank" to "com.f1soft.nabilbank",
-        "Global Smart Plus" to "com.f1soft.globalime",
-        "NIMB Smart" to "com.f1soft.nimb",
-        "RBB Digital Sansar" to "com.f1soft.rastriyabanijyamobilebanking",
-        "NBL BankSmart" to "com.f1soft.nepalmobilebanking",
-        "ADBL Smart" to "com.f1soft.adblmobilebanking",
-        "Prabhu Smart" to "com.f1soft.prabhubank",
-        "Siddhartha BankSmart" to "com.f1soft.siddharthamb",
-        "Sanima Sajilo" to "com.f1soft.sanima",
-        "Citizens Smart" to "com.f1soft.citizencol",
-        "Kumari Smart" to "com.f1soft.kumari",
-        "HI-MB (Himalayan)" to "com.f1soft.himalayan",
-        "EBL Touch (Everest)" to "com.f1soft.everest",
-        "Laxmi Sunrise Smart" to "com.f1soft.sunrise",
-        "MBL M-Smart" to "com.f1soft.machhapuchhre",
-        "NMB e-banking" to "com.f1soft.nmbbank",
-        "Prime Smart" to "com.f1soft.primebank",
-        "SBI Nepal Smart" to "com.f1soft.nepalsbibank",
-        "SCB Nepal" to "com.f1soft.standardchartered",
-
-        "Garima Digi Batuwa" to "com.f1soft.garimabank",
-        "Muktinath Smart" to "com.f1soft.muktinathmobilebanking",
-        "Jyoti Smart" to "com.f1soft.jyotibank",
-        "Lumbini Smart" to "com.f1soft.hbmobilebanking",
-        "Shangri-la Smart" to "com.f1soft.shangrilabank",
-        "Kamana Sewa Smart" to "com.f1soft.kamana"
+        "Global Smart Plus" to "com.swifttechnology.globalsmart", // Verified
+        "NIMB Smart" to "com.f1soft.megafonebank.activities.starter", // Verified
+        "Digi Prabhu" to "com.f1soft.kistmobilebanking.activities.main", // Verified
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,21 +60,32 @@ class MainActivity : AppCompatActivity() {
         val btnConfigureApps = findViewById<Button>(R.id.btnVerifyApps) 
         val btnFixNotif = findViewById<Button>(R.id.btnFixNotification)
 
+        val sharedPref = getSharedPreferences("PaySayPrefs", MODE_PRIVATE)
+        isServiceRunning = sharedPref.getBoolean("is_active", false)
+
         // Set Default State (Standby)
         updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
 
         // --- Logic: Start/Stop Service ---
         btnToggle.setOnClickListener {
+            val sharedPref = getSharedPreferences("PaySayPrefs", MODE_PRIVATE)
+
             if (!isServiceRunning) {
+                // USER Clicked Start
                 if (isNotificationServiceEnabled()) {
                     isServiceRunning = true
+                    sharedPref.edit().putBoolean("is_active", true).apply()
                     updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
+                    Toast.makeText(this, "PaySay: Monitoring Started", Toast.LENGTH_SHORT).show()
                 } else {
                     showPermissionDialog()
                 }
             } else {
+                // User clicked STOP
                 isServiceRunning = false
+                sharedPref.edit().putBoolean("is_active", false).apply()
                 updateUI(isServiceRunning, pulseGlow, pulseContainer, innerStatusText, btnToggle)
+                Toast.makeText(this, "PaySay: Monitoring Stopped", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -164,8 +152,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // private fun getDetectedPaymentApps(): Map<String, String> {
+    //     val detected = mutableMapOf<String, String>()
+    //     val pm = packageManager
+        
+    //     // Core prefixes that cover 99% of the Nepali market
+    //     val trustedPrefixes = listOf(
+    //         "com.f1soft",            // Covers eSewa and almost all MoBanks
+    //         "com.khalti",            // Khalti
+    //         "com.swifttechnology",   // IME Pay
+    //         "com.prabhu.prabhupay",  // Prabhu Pay
+    //         "com.android.shell"      // For your ADB testing
+    //     )
+    
+    //     // Query all installed applications
+    //     val allPackages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+    
+    //     for (appInfo in allPackages) {
+    //         val pkg = appInfo.packageName
+            
+    //         // Check if this package starts with any of our trusted strings
+    //         if (trustedPrefixes.any { pkg.startsWith(it) }) {
+    //             // Get the actual name of the app as shown on the home screen
+    //             val label = pm.getApplicationLabel(appInfo).toString()
+    //             detected[label] = pkg
+    //         }
+    //     }
+    //     return detected.toSortedMap() // Sort alphabetically for a professional UI
+    // }
+
     private fun showAppSelectionDialog() {
         val installedApps = paymentApps.filter { isPackageInstalled(it.value) }
+        // val installedApps = getDetectedPaymentApps()
     
         if (installedApps.isEmpty()) {
             Toast.makeText(this, "No payment apps detected.", Toast.LENGTH_SHORT).show()

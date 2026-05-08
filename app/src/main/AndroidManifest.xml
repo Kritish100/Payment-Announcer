@@ -37,16 +37,21 @@
         <package android:name="com.prabhu.prabhupay" />
         <package android:name="com.f1soft.fonepay.merchant" />
         <package android:name="com.f1soft.fonepay.user" />
+        
+        <!-- TEST -->
+        <package android:name="com.android.shell" />
 
         <!-- Class A Banks -->
         <package android:name="com.f1soft.rastriyabanijyamobilebanking" />
         <package android:name="com.f1soft.nepalmobilebanking" />
         <package android:name="com.f1soft.adblmobilebanking" />
-        <package android:name="com.f1soft.nicasiamobilebanking" /> 
         <package android:name="com.f1soft.nabilbank" />   
-        <package android:name="com.f1soft.globalime" />   
-        <package android:name="com.f1soft.nimb" />        
-        <package android:name="com.f1soft.prabhubank" />  
+        
+        <package android:name="com.f1soft.nicasiamobilebanking" /> <!-- Verified -->
+        <package android:name="com.swifttechnology.globalsmart" /> <!-- Verified -->
+        <package android:name="com.f1soft.megafonebank.activities.starter" /> <!-- NIMB Smart Verified -->
+        <package android:name="com.f1soft.kistmobilebanking.activities.main" /> <!-- Digi Prabhu Verified -->
+
         <package android:name="com.f1soft.siddharthamb" /> 
         <package android:name="com.f1soft.sanima" />      
         <package android:name="com.f1soft.citizencol" />  
@@ -66,6 +71,12 @@
         <package android:name="com.f1soft.hbmobilebanking" />       
         <package android:name="com.f1soft.shangrilabank" />      
         <package android:name="com.f1soft.kamana" />
+
+
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
 
     </queries>
 

@@ -3,52 +3,101 @@ package com.example.payment
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.content.Intent
+import android.content.ComponentName
+import android.os.Build
 import android.util.Log
-
-import android.media.MediaPlayer
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
-import android.media.AudioManager
 import android.content.Context
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 
 class NotificationService : NotificationListenerService() {
 
     private lateinit var announcer: PaymentAnnouncer
+
+    // Replace the targetPackages set with this logic
+    private fun isTargetPackage(packageName: String): Boolean {
+        return when {
+            // 1. The F1Soft Ecosystem (Esewa, Fonepay & most banks)
+            packageName.contains("com.f1soft") -> true
+            
+            // 2. Major Wallets not on F1Soft
+            packageName.contains("com.khalti") -> true
+            packageName.contains("com.swifttechnology") -> true
+            packageName.contains("com.prabhu.prabhupay") -> true
+            
+            // 3. Testing
+            packageName == "com.android.shell" -> true
+            
+            else -> false
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
         announcer = PaymentAnnouncer(this)
     }
 
+    /**
+     * This is the "Secret Sauce" for background persistence.
+     * Tells Android to restart this service if it gets killed for memory.
+     */
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
+    }
+
+    /**
+     * Called when the system successfully connects to your listener.
+     */
+    override fun onListenerConnected() {
+        super.onListenerConnected()
+        Log.d("PaySay", "Notification Listener Connected")
+    }
+
+    /**
+     * If the system disconnects the listener (common on some Chinese OEMs),
+     * this tries to request a re-bind silently.
+     */
+    override fun onListenerDisconnected() {
+        super.onListenerDisconnected()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            requestRebind(ComponentName(this, NotificationService::class.java))
+        }
+    }
+
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+        
+        // 1. Read the switch state from SharedPreferences
+        val sharedPref = getSharedPreferences("PaySayPrefs", android.content.Context.MODE_PRIVATE)
+        val isActive = sharedPref.getBoolean("is_active", false) // Default to false if not set
 
-        val packageName = sbn.packageName
-        val extras = sbn.notification.extras
-        val title = extras.getString("android.title") ?: ""
-        val content = extras.getString("android.text") ?: ""
-
-        // 1. Send the data to MainActivity for debugging
-        val debugIntent = Intent("NOTIFICATION_DUMP")
-        debugIntent.putExtra("data", "Package: $packageName\nTitle: $title\nContent: $content")
-        sendBroadcast(debugIntent)
-
-        // Filter for eSewa Business app or main eSewa app
-        // val targetApp = sbn.packageName == "com.esewa.merchant" || sbn.packageName == "com.f1soft.esewa"
-        val targetApp = true
-        if (targetApp) {
-            // val notificationContent = sbn.notification.extras.getString("android.text") ?: ""
-            // val amount = extractAmount(notificationContent)
-            
-            // if (amount != null && amount > 0) {
-            //     announcer.announce(amount)
-            // }
-
-            // TEST TEST TEST
-            announcer.announce(250)
+        // 2. If the user pressed STOP, we exit immediately
+        if (!isActive) {
+            Log.d("PaySay", "Service is technically running but user set state to STOPPED. Ignoring.")
+            return 
         }
 
-        // playTestSound()
-        
+        // 2. Check if the app is in our target list
+        if (isTargetPackage(sbn.packageName)) {
+            
+            val packageName = sbn.packageName
+            val extras = sbn.notification.extras
+            val content = extras.getString("android.text") ?: ""
+            
+            Log.d("PaySay", "Notification from: $packageName Content: $content")
+            // val amount = extractAmount(content)
+            // TEST TEST TEST
+            val amount = 250
+            
+            if (amount != null && amount > 0) {
+                // Real payment detected!
+                announcer.announce(amount, packageName)
+            } else {
+                // If parsing fails, you can announce a generic "Payment Received" 
+                // or just log it for debugging during your test.
+                Log.d("PaySay", "Matched $packageName but no amount found.")
+            }
+        }
     }
 
     private fun extractAmount(text: String): Int? {
@@ -56,35 +105,6 @@ class NotificationService : NotificationListenerService() {
         val match = regex.find(text)
         return match?.groupValues?.get(1)?.let { raw ->
             raw.replace(",", "").toDoubleOrNull()?.toInt()
-        }
-    }
-
-    private fun playTestSound() {
-        val am = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        // 1. Set Volume to Max (Stream Music is what Bluetooth speakers usually use)
-        val originalVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC)
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0)
-
-        // 2. Request Audio Focus (Pauses YouTube)
-        val focusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-            .setAudioAttributes(AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                .build())
-            .build()
-
-        if (am.requestAudioFocus(focusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-            val resId = resources.getIdentifier("initial", "raw", packageName)
-            MediaPlayer.create(this, resId)?.apply {
-                start()
-                setOnCompletionListener { 
-                    it.release()
-                    // 3. Return Focus (Resumes YouTube) and restore Volume
-                    am.abandonAudioFocusRequest(focusRequest)
-                    am.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0)
-                }
-            }
         }
     }
 }
