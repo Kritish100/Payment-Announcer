@@ -34,18 +34,55 @@ class MainActivity : AppCompatActivity() {
 
     // 1. Define the package names for Nepalese Payment Apps
     private val paymentApps = mapOf(
+        // Wallets & Payment Services
         "eSewa" to "com.f1soft.esewa", // verified
+        "eSewa Business" to "com.esewa.merchant", // verified
         "Khalti" to "com.khalti", // verified
         "IME Pay" to "com.swifttechnology.imepay", // verified
-        "IME Pay Merchant" to "com.swifttechnology.imepaymerchant",
-        "Fonepay" to "com.f1soft.fonepay.user",
-        "Fonepay Merchant" to "com.f1soft.fonepay.merchant",
-        "Prabhu Pay" to "com.prabhu.prabhupay",
+        "IME Pay Merchant" to "com.swifttechnology.imepaymerchant", // Verified
+        "Fonepay" to "com.fonepay", // Verified
+        "Fonepay Merchant" to "com.f1soft.fonepay.merchant", // verified
+        "Prabhu Pay" to "com.prabhutech.prabhupay", // verified
+        "Prabhy Pay Merchant" to "com.prabhutech.prabhupaymerchant", // verified
+        "Namaste Pay" to "app.namasteypay.consumer", // verified
+        "Partner Namaste Pay" to "app.namasteypay.partner", // verified
+        "MyPay" to "com.mobile.smartcard", // Verified
+        "Moru" to "com.paynep.moru", // verified
+        "CellPay" to "com.cellpay", // verified
 
+        // Mobile Banking Apps (All under F1Soft)
         "NIC Asia MoBank" to "com.f1soft.nicasiamobilebanking", // verified
-        "Global Smart Plus" to "com.swifttechnology.globalsmart", // Verified
-        "NIMB Smart" to "com.f1soft.megafonebank.activities.starter", // Verified
         "Digi Prabhu" to "com.f1soft.kistmobilebanking.activities.main", // Verified
+        "Siddhartha BankSmart" to "com.f1soft.banksmart.siddhartha", // Verified
+        "NBL BankSmart" to "com.f1soft.nepalmobilebanking", // Verified
+        "NIMB Smart" to "com.f1soft.megafonebank.activities.starter", // Verified
+        "Citizens Smart" to "com.f1soft.citizensmobilebanking", // Verified
+        "MBL M-Smart" to "com.f1soft.machmobilebanking.activities.main", // Verified
+        "RBB Digital" to "com.f1soft.rastriyabanijyamobilebanking", // Verified
+        "ADBL Smart" to "com.f1soft.banksmart.adbl", // Verified
+        "Garima Digital" to "com.f1soft.garimamobilebanking", // Verified
+        "Jyoti Smart" to "com.f1soft.jyotimobilebanking", // Verified
+        "DigiShine" to "com.f1soft.shineresungamobilebanking", // Verified
+        "Mahalaxmi Smart" to "com.f1soft.mallikamobilebanking", // Verified
+        "Shangrila Smart" to "com.f1soft.shangrilamobilebanking", // Verified
+        "Excel Smart" to "com.f1soft.excelmobilebanking", // Verified
+        "Manjushree Smart" to "com.f1soft.manjushreefinance", // Verified
+        "Lumbini Smart" to "com.f1soft.hbmobilebanking", // Verified
+        "NMC Smart" to "com.f1soft.nmcmobilebanking", // Verified
+        "Kisan Smart" to "com.f1soft.kishanmicrofinance", // Verified
+        "Sahara Smart" to "com.f1soft.saharamobilebanking", // Verified
+        "Sanima Sajilo" to "com.f1soft.sanimamobilebanking", // Verified
+        "Prime Smart" to "com.f1soft.primemobilebanking", // Verified
+        "Nabil" to "com.f1soft.nabilmbank", // Verified
+        "Kumari Smart" to "com.f1soft.kumarimobilebanking", // Verified
+        
+        // Others
+        "SC Mobile Nepal" to "com.sc.mobilebanking.np", // Verified
+        "Everest Bank Mobile" to "com.everestbankltd.mbanking", // Verified
+        "Global Smart Plus" to "com.swifttechnology.globalsmart", // Verified
+
+
+        "ConnectIPS" to "com.infodev.nchl_android", // Verified
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

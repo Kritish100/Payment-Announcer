@@ -31,48 +31,54 @@
     <queries>
         <!-- Wallets -->
         <package android:name="com.f1soft.esewa" />
+        <package android:name="com.esewa.merchant" />
         <package android:name="com.khalti" />
         <package android:name="com.swifttechnology.imepay" />
         <package android:name="com.swifttechnology.imepaymerchant" />
-        <package android:name="com.prabhu.prabhupay" />
+        <package android:name="com.fonepay" />
         <package android:name="com.f1soft.fonepay.merchant" />
-        <package android:name="com.f1soft.fonepay.user" />
-        
+        <package android:name="com.prabhu.prabhupay" />
+        <package android:name="com.prabhutech.prabhupaymerchant" />
+        <package android:name="app.namasteypay.consumer" />
+        <package android:name="app.namasteypay.partner" />
+        <package android:name="com.mobile.smartcard" />
+        <package android:name="com.paynep.moru" />
+        <package android:name="com.cellpay" />
+
         <!-- TEST -->
         <package android:name="com.android.shell" />
+        <package android:name="com.mand.notitest" />
 
-        <!-- Class A Banks -->
-        <package android:name="com.f1soft.rastriyabanijyamobilebanking" />
-        <package android:name="com.f1soft.nepalmobilebanking" />
-        <package android:name="com.f1soft.adblmobilebanking" />
-        <package android:name="com.f1soft.nabilbank" />   
+        <!-- Banks -->
+        <package android:name="com.f1soft.nicasiamobilebanking" />   
+        <package android:name="com.f1soft.kistmobilebanking.activities.main" />   
+        <package android:name="com.f1soft.banksmart.siddhartha" />   
+        <package android:name="com.f1soft.nepalmobilebanking" />   
+        <package android:name="com.f1soft.megafonebank.activities.starter" />   
+        <package android:name="com.f1soft.citizensmobilebanking" />   
+        <package android:name="com.f1soft.machmobilebanking.activities.main" />   
+        <package android:name="com.f1soft.rastriyabanijyamobilebanking" />   
+        <package android:name="com.f1soft.banksmart.adbl" />   
+        <package android:name="com.f1soft.garimamobilebanking" />   
+        <package android:name="com.f1soft.jyotimobilebanking" />   
+        <package android:name="com.f1soft.shineresungamobilebanking" />   
+        <package android:name="com.f1soft.mallikamobilebanking" />   
+        <package android:name="com.f1soft.shangrilamobilebanking" />   
+        <package android:name="com.f1soft.excelmobilebanking" />   
+        <package android:name="com.f1soft.manjushreefinance" />   
+        <package android:name="com.f1soft.hbmobilebanking" />   
+        <package android:name="com.f1soft.nmcmobilebanking" />   
+        <package android:name="com.f1soft.kishanmicrofinance" />   
+        <package android:name="com.f1soft.saharamobilebanking" />   
+        <package android:name="com.f1soft.sanimamobilebanking" />   
+        <package android:name="com.f1soft.primemobilebanking" />   
+        <package android:name="com.f1soft.nabilmbank" />   
+        <package android:name="com.f1soft.kumarimobilebanking" />   
+        <package android:name="com.sc.mobilebanking.np" />   
+        <package android:name="com.everestbankltd.mbanking" />   
+        <package android:name="com.swifttechnology.globalsmart" />   
+        <package android:name="com.infodev.nchl_android" />   
         
-        <package android:name="com.f1soft.nicasiamobilebanking" /> <!-- Verified -->
-        <package android:name="com.swifttechnology.globalsmart" /> <!-- Verified -->
-        <package android:name="com.f1soft.megafonebank.activities.starter" /> <!-- NIMB Smart Verified -->
-        <package android:name="com.f1soft.kistmobilebanking.activities.main" /> <!-- Digi Prabhu Verified -->
-
-        <package android:name="com.f1soft.siddharthamb" /> 
-        <package android:name="com.f1soft.sanima" />      
-        <package android:name="com.f1soft.citizencol" />  
-        <package android:name="com.f1soft.kumari" />
-        <package android:name="com.f1soft.primebank" />
-        <package android:name="com.f1soft.nepalsbibank" />
-        <package android:name="com.f1soft.standardchartered" />
-        <package android:name="com.f1soft.himalayan" />   
-        <package android:name="com.f1soft.machhapuchhre" />
-        <package android:name="com.f1soft.sunrise" />     
-        <package android:name="com.f1soft.everest" />     
-
-        <!-- Class B Banks -->
-        <package android:name="com.f1soft.garimabank" />
-        <package android:name="com.f1soft.muktinathmobilebanking" />
-        <package android:name="com.f1soft.jyotibank" />       
-        <package android:name="com.f1soft.hbmobilebanking" />       
-        <package android:name="com.f1soft.shangrilabank" />      
-        <package android:name="com.f1soft.kamana" />
-
-
         <intent>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />

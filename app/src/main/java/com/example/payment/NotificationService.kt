@@ -18,16 +18,14 @@ class NotificationService : NotificationListenerService() {
     // Replace the targetPackages set with this logic
     private fun isTargetPackage(packageName: String): Boolean {
         return when {
-            // 1. The F1Soft Ecosystem (Esewa, Fonepay & most banks)
             packageName.contains("com.f1soft") -> true
-            
-            // 2. Major Wallets not on F1Soft
             packageName.contains("com.khalti") -> true
             packageName.contains("com.swifttechnology") -> true
-            packageName.contains("com.prabhu.prabhupay") -> true
+            packageName.contains("com.prabhu") -> true
             
             // 3. Testing
             packageName == "com.android.shell" -> true
+            packageName == "com.mand.notitest" -> true
             
             else -> false
         }
@@ -66,7 +64,6 @@ class NotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        
         // 1. Read the switch state from SharedPreferences
         val sharedPref = getSharedPreferences("PaySayPrefs", android.content.Context.MODE_PRIVATE)
         val isActive = sharedPref.getBoolean("is_active", false) // Default to false if not set
@@ -79,32 +76,42 @@ class NotificationService : NotificationListenerService() {
 
         // 2. Check if the app is in our target list
         if (isTargetPackage(sbn.packageName)) {
-            
-            val packageName = sbn.packageName
             val extras = sbn.notification.extras
-            val content = extras.getString("android.text") ?: ""
-            
-            Log.d("PaySay", "Notification from: $packageName Content: $content")
-            // val amount = extractAmount(content)
-            // TEST TEST TEST
-            val amount = 250
-            
+
+            // 1. Pull from ALL possible text fields
+            val title = extras.getCharSequence("android.title")?.toString() ?: ""
+            val text = extras.getCharSequence("android.text")?.toString() ?: ""
+            val bigText = extras.getCharSequence("android.bigText")?.toString() ?: ""
+
+            // 2. Combine them to ensure we don't miss the number
+            val fullContent = "$title $text $bigText"
+
+            Log.d("PaySay", "Incoming from ${sbn.packageName}")
+            Log.d("PaySay", "Full Content: $fullContent")
+
+            // 3. Use your regex logic
+            val amount = extractAmount(fullContent)
+
             if (amount != null && amount > 0) {
-                // Real payment detected!
-                announcer.announce(amount, packageName)
+                Log.d("PaySay", "Success! Extracted Amount: $amount")
+                announcer.announce(amount, sbn.packageName)
             } else {
-                // If parsing fails, you can announce a generic "Payment Received" 
-                // or just log it for debugging during your test.
-                Log.d("PaySay", "Matched $packageName but no amount found.")
+                Log.d("PaySay", "Failed to extract amount from: $fullContent")
             }
         }
     }
 
     private fun extractAmount(text: String): Int? {
-        val regex = "(?i)(?:NPR|Rs\\.?)\\s*([\\d,]+(?:\\.\\d{2})?)".toRegex()
+        // This looks for:
+        // 1. Numbers following Rs. or NPR
+        // 2. OR just standalone numbers that look like currency (e.g., 250 or 250.00)
+        val regex = "(?i)(?:NPR|Rs\\.?|Received|Amount)\\s*([\\d,]+(?:\\.\\d{1,2})?)|([\\d,]{2,}(?:\\.\\d{1,2})?)".toRegex()
         val match = regex.find(text)
-        return match?.groupValues?.get(1)?.let { raw ->
-            raw.replace(",", "").toDoubleOrNull()?.toInt()
-        }
+        
+        // Check group 1 (with prefix) or group 2 (standalone number)
+        val rawAmount = match?.groupValues?.get(1)?.takeIf { it.isNotEmpty() } 
+                    ?: match?.groupValues?.get(2)
+
+        return rawAmount?.replace(",", "")?.toDoubleOrNull()?.toInt()
     }
 }
